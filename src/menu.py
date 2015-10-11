@@ -195,7 +195,9 @@ def main():
 			if event == "Load Game":
 				savegame = savegames()
 				if savegame is not None:
-					settings.load(savegame)
+					saver = settings.data()
+					saver.load(savegame)
+					settings.player.move_rel()
 					sounds.music.play("next", 0)
 					settings.upd("get_saves")
 					settings.upd("adjust_screen")

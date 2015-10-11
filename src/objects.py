@@ -138,7 +138,6 @@ class target():
 		self.kill_entity = False
 		self.inscreen = True
 		self.move(settings.player.pos.x, settings.player.pos.y)
-		self.test = 0
 
 	def update(self):
 		"""Adjusts position according to screen size"""
@@ -251,13 +250,13 @@ class warp_station():
 			settings.right = False
 			while test_collide():
 				if settings.player.pos.center[0] < self.pos.center[0]:
-					settings.player.move_ip(-20, 0)
+					settings.player.move_pix_ip(-20, 0)
 				else:
-					settings.player.move_ip(20, 0)
+					settings.player.move_pix_ip(20, 0)
 				if settings.player.pos.center[1] < self.pos.center[1]:
-					settings.player.move_ip(0, -20)
+					settings.player.move_pix_ip(0, -20)
 				else:
-					settings.player.move_ip(0, 20)
+					settings.player.move_pix_ip(0, 20)
 				playerpos = settings.player.pos
 
 	def blit(self):

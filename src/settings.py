@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 import pygame
 from pygame.locals import *
-from ConfigParser import SafeConfigParser
 from libs.pyganim import pyganim
 import os
 import shutil
@@ -110,7 +109,7 @@ def init():
 	konstspeed = 0.0025
 	fullscreen = False
 	debugscreen = False
-	debugmode = False
+	debugmode = True
 	dstars = 500
 	isnear = "False"
 	code = ""
@@ -164,11 +163,7 @@ def init():
 	explosions = [explosion9, explosion10, explosion11]
 	explosions_disp = []
 
-	saves = []
-	for filename in os.listdir("./saves"):
-		if filename.endswith(".ini"):
-			filename = filename[:-4].decode("utf-8")
-			saves.append(filename)
+	upd("get_saves")
 
 	if fullscreen:
 		screen = pygame.display.set_mode(
@@ -242,8 +237,8 @@ def upd(level):
 		global saves
 		saves = []
 		for filename in os.listdir("./saves"):
-			if filename.endswith(".ini"):
-				filename = filename[:-4]
+			if filename.endswith(".json"):
+				filename = filename[:-5]
 				if filename not in ("default"):
 					saves.append(filename)
 		return
@@ -302,73 +297,92 @@ class data():
 
 	def save(self, name):
 
+		from . import sounds
 		name = name.encode("utf-8")
-
 		# removes invalid characters
 		if "/" in name:
 			name = name.replace("/", "\\")
 		if "%" in name:
 			name = name.replace("%", "")
 
-		data = {"Fullscreen": fullscreen,
+		all_world_data = {}
+		for world_name in localmap:
+			all_world_data[world_name] = {}
+			all_world_data[world_name]["targets"] = []
+			all_world_data[world_name]["station"] = {}
+			for target in localmap[world_name].targets:
+				savable_vars = {}
+				for inst_var in target.__dict__:
+					if type(target.__dict__[inst_var]) in [list, str, int, float, bool]:
+						savable_vars[inst_var] = target.__dict__[inst_var]
+				all_world_data[world_name]["targets"].append(savable_vars)
+			savable_vars = {}
+			station_vars = localmap[world_name].warp1.__dict__
+			for inst_var in station_vars:
+				if type(station_vars[inst_var]) in [list, str, int, float, bool]:
+					savable_vars[inst_var] = station_vars[inst_var]
+			all_world_data[world_name]["station"] = (savable_vars)
+
+		data = {"fullscreen": fullscreen,
 			"screenx_current": screenx_current,
 			"screeny_current": screeny_current,
 			"debugmode": debugmode,
 			"debugscreen": debugscreen,
-			"player.pos.x": player.pos.x,
-			"player.pos.y": player.pos.y,
-			"volume": volume,
-			"player.timeplay": player.timeplay
+			"player.rel_x": player.rel_x,
+			"player.rel_y": player.rel_y,
+			"sounds.music.volume": sounds.music.volume,
+			"player.timeplay": player.timeplay,
+			"world.name": world.name,
+			"all_world_data": all_world_data
 			}
 
 		file_obj = open("./saves/" + name + ".json", "w")
 		json.dump(data, file_obj, indent=12)
 
-	def load(name):
+	def load(self, name):
 		"""Load savegame"""
+		from . import sounds
+		from . import objects
 		global fullscreen
 		global screenx_current
 		global screeny_current
-		global debugscreen
 		global debugmode
-		global config
-		global skip
-		global pos_x
-		global pos_y
-		global volume
-		global saves
-		global screen
+		global debugscreen
+		global localmap
+		global world
+		try:
+			data = json.load(open("./saves/" + unicode(name) + ".json", "r"))
+			fullscreen = data["fullscreen"]
+			screenx_current = data["screenx_current"]
+			screeny_current = data["screeny_current"]
+			debugmode = data["debugmode"]
+			debugscreen = data["debugscreen"]
+			player.rel_x = data["player.rel_x"]
+			player.rel_y = data["player.rel_y"]
+			sounds.music.volume = data["sounds.music.volume"]
+			player.timeplay = data["player.timeplay"]
 
-		upd("get_saves")
-
-		config = SafeConfigParser()
-		for a in saves:
-			if a == name.encode("utf-8"):
-				config.read("./saves/" + a + ".ini")
-		if not (saves == []):
-
-			# tries to load and returns values in terminal that couldnt be loaded
-			import ConfigParser
-			try:
-				from . import sounds
-				#lint:disable
-				fullscreen = config.getboolean("main", "fullscreen")
-				screenx_current = int(config.getfloat("main", "screenx_current"))
-				screeny_current = int(config.getfloat("main", "screeny_current"))
-				debugscreen = config.getboolean("main", "debugscreen")
-				debugmode = config.getboolean("main", "debugmode")
-				skip = config.getboolean("main", "skip")
-				pos_x = config.getfloat("main", "posy")
-				pos_y = config.getfloat("main", "posx")
-				sounds.music.volume = config.getfloat("main", "volume")
-				#lint:enable
-			except ConfigParser.NoOptionError as test:
-				print(("Saved game couldn't be loaded completly: " + str(test)))
-			except Exception:
-				print(("Unexpected error:", sys.exc_info()[0]))
-				print((traceback.format_exc()))
-
-		screen = pygame.display.set_mode((screenx_current, screeny_current))
+			from . import worlds
+			localmap = {}
+			for world_data in data["all_world_data"]:
+				localmap[world_data] = worlds.world(world_data)
+				localmap[world_data].generate(background, dstars, 0)
+				for target_data in data["all_world_data"][world_data]["targets"]:
+					tmp_target = objects.target()
+					tmp_target.pos_xper = target_data["pos_xper"]
+					tmp_target.pos_yper = target_data["pos_yper"]
+					tmp_target.timer = target_data["timer"]
+					tmp_target.update()
+					localmap[world_data].targets.append(tmp_target)
+				tmp_station = objects.warp_station()
+				tmp_station.x_pos = data["all_world_data"][world_data]["station"]["x_pos"]
+				tmp_station.y_pos = data["all_world_data"][world_data]["station"]["y_pos"]
+				tmp_station.update()
+				localmap[world_data].warp1 = tmp_station
+			world = localmap[data["world.name"]]
+		except Exception:
+			print(("Unexpected error:", sys.exc_info()[0]))
+			print((traceback.format_exc()))
 
 
 def quit():

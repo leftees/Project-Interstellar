@@ -11,4 +11,4 @@ file_obj.close()
 
 file_obj = open("test1.json", "r")
 read_data = json.load(file_obj)
-print type(read_data["Fullscreen"])
+print read_data

@@ -70,10 +70,19 @@ class player():
 		if self.rotation == 315:
 			self.img = self.playeruple
 
-	def move_ip(self, addx, addy):
+	def move_pix_ip(self, addx, addy):
 		#lint:disable
 		self.rel_x = (self.pos.x + addx) / float(settings.screenx_current)
 		self.rel_y = (self.pos.y + addy) / float(settings.screeny_current)
+		self.pos.top = int(self.rel_y * settings.screeny_current)
+		self.pos.left = int(self.rel_x * settings.screenx_current)
+		#lint:enable
+
+	def move_rel(self, *args):
+		if len(args):
+			self.rel_x = args[0]
+			self.rel_y = args[1]
+		#lint:disable
 		self.pos.top = int(self.rel_y * settings.screeny_current)
 		self.pos.left = int(self.rel_x * settings.screenx_current)
 		#lint:enable
