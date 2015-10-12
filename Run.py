@@ -21,7 +21,9 @@ try:
 	required = "2.7.6"
 	for i in range(len(required.replace(".", ""))):
 		if str(sys.version_info[i]) < required.split('.')[i]:
-			raise SystemExit("Outdated Python version: %s; required: %s" % (sys.version.split()[0], required))
+			raise SystemExit(
+				"Outdated Python version: %s; required: %s" % (
+								sys.version.split()[0], required))
 		if str(sys.version_info[i]) > required.split('.')[i]:
 			break
 	if sys.version[:1] >= "3":

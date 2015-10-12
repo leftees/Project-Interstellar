@@ -305,8 +305,14 @@ class data():
 		if "%" in name:
 			name = name.replace("%", "")
 
+		if not os.path.isdir("./saves/%s/" % name):
+			os.makedirs("./saves/%s/" % name)
+
 		all_world_data = {}
+		world_image = {}
 		for world_name in localmap:
+			if not os.path.isdir("./saves/%s/%s" % (name, world_name)):
+				os.makedirs("./saves/%s/%s" % (name, world_name))
 			all_world_data[world_name] = {}
 			all_world_data[world_name]["targets"] = []
 			all_world_data[world_name]["station"] = {}
@@ -322,6 +328,7 @@ class data():
 				if type(station_vars[inst_var]) in [list, str, int, float, bool]:
 					savable_vars[inst_var] = station_vars[inst_var]
 			all_world_data[world_name]["station"] = (savable_vars)
+			world_image[world_name] = localmap[world_name].background
 
 		data = {"fullscreen": fullscreen,
 			"screenx_current": screenx_current,
@@ -333,11 +340,15 @@ class data():
 			"sounds.music.volume": sounds.music.volume,
 			"player.timeplay": player.timeplay,
 			"world.name": world.name,
-			"all_world_data": all_world_data
 			}
 
-		file_obj = open("./saves/" + name + ".json", "w")
-		json.dump(data, file_obj, indent=12)
+		settings_file = open("./saves/" + name + "/Data.json", "w")
+		for world_name in localmap:
+			world_file = open("./saves/%s/%s/world.json" % (name, world_name), "w")
+			pygame.image.save(world_image[world_name],
+					"./saves/%s/%s/background.tif" % (name, world_name))
+			json.dump(all_world_data, world_file, indent=12)
+		json.dump(data, settings_file, indent=12)
 
 	def load(self, name):
 		"""Load savegame"""
