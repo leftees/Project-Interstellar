@@ -35,8 +35,6 @@ def handle(usage):
 
 		screen = settings.screen
 
-		settings.save(settings.current_game)
-
 		fade = pygame.Surface((settings.screenx_current, settings.screeny_current))
 		fade.fill((0, 0, 0))
 		fade.set_alpha(0)

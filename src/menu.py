@@ -247,7 +247,8 @@ def pause():
 			if event == "Load Game":
 				savegame = savegames()
 				if savegame is not None:
-					settings.load(savegame)
+					saver = settings.data()
+					saver.load(savegame)
 					sounds.music.play("unpause")
 					settings.upd("get_saves")
 					settings.upd("adjust_screen")
@@ -391,6 +392,10 @@ def savegames():
 	list_of_saves = settings.saves
 	D_saves = len(list_of_saves)
 	currently_selected = 0
+
+	if len(list_of_saves) == 0:
+		print(("No current savegames"))
+		return None
 
 	# Defines Menu
 	settings_menu = menu_template("load", 0, 255, 255,

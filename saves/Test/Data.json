@@ -1,0 +1,22 @@
+{
+            "world.name": "1", 
+            "worlds": [
+                        "1", 
+                        "3", 
+                        "2", 
+                        "5", 
+                        "4", 
+                        "7", 
+                        "6", 
+                        "8"
+            ], 
+            "player.rel_y": 0.6481389934484809, 
+            "fullscreen": false, 
+            "debugscreen": true, 
+            "screeny_current": 540, 
+            "player.rel_x": 0.38073049264701764, 
+            "screenx_current": 960, 
+            "player.timeplay": 16324, 
+            "debugmode": true, 
+            "sounds.music.volume": 0.0
+}

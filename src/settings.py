@@ -48,7 +48,6 @@ def init():
 	global musics  # the list of music titles assoziated wih the music files
 	global saves  # all savegames
 	global psycomode  # if psycomode is turned on
-	global current_game  # the current savegame and default when no game is saved
 	global explosions  # list of surfs of explosions
 	global explosions_disp  # list of showing explosions
 	global run  # boolean for main loop
@@ -120,7 +119,6 @@ def init():
 	fullscreenold = False
 	fake_size = 8 / 7.0
 	psycomode = False
-	current_game = "default"
 	run = True
 	dtargets = 5
 	morevents = []
@@ -236,11 +234,9 @@ def upd(level):
 	if level == "get_saves":
 		global saves
 		saves = []
-		for filename in os.listdir("./saves"):
-			if filename.endswith(".json"):
-				filename = filename[:-5]
-				if filename not in ("default"):
-					saves.append(filename)
+		for elem in os.listdir("./saves/"):
+			if os.path.isdir("./saves/" + elem):
+				saves.append(elem)
 		return
 	if level == "adjust_screen":
 		global background
@@ -340,14 +336,15 @@ class data():
 			"sounds.music.volume": sounds.music.volume,
 			"player.timeplay": player.timeplay,
 			"world.name": world.name,
+			"worlds": list(localmap.keys())
 			}
 
 		settings_file = open("./saves/" + name + "/Data.json", "w")
 		for world_name in localmap:
 			world_file = open("./saves/%s/%s/world.json" % (name, world_name), "w")
 			pygame.image.save(world_image[world_name],
-					"./saves/%s/%s/background.tif" % (name, world_name))
-			json.dump(all_world_data, world_file, indent=12)
+					"./saves/%s/%s/background.png" % (name, world_name))
+			json.dump(all_world_data[world_name], world_file, indent=12)
 		json.dump(data, settings_file, indent=12)
 
 	def load(self, name):
@@ -362,7 +359,7 @@ class data():
 		global localmap
 		global world
 		try:
-			data = json.load(open("./saves/" + unicode(name) + ".json", "r"))
+			data = json.load(open("./saves/" + unicode(name) + "/Data.json", "r"))
 			fullscreen = data["fullscreen"]
 			screenx_current = data["screenx_current"]
 			screeny_current = data["screeny_current"]
@@ -372,24 +369,29 @@ class data():
 			player.rel_y = data["player.rel_y"]
 			sounds.music.volume = data["sounds.music.volume"]
 			player.timeplay = data["player.timeplay"]
+			world_names = data["worlds"]
 
 			from . import worlds
 			localmap = {}
-			for world_data in data["all_world_data"]:
-				localmap[world_data] = worlds.world(world_data)
-				localmap[world_data].generate(background, dstars, 0)
-				for target_data in data["all_world_data"][world_data]["targets"]:
+			for world_name in world_names:
+				background_dir = "./saves/%s/%s/background.png" % (name, world_name)
+				background = pygame.image.load(background_dir)
+				world_data = json.load(open("./saves/%s/%s/world.json"
+							% (name, world_name), "r"))
+				localmap[world_name] = worlds.world(world_name)
+				localmap[world_name].generate(background, dstars, 0)
+				for target_data in world_data["targets"]:
 					tmp_target = objects.target()
 					tmp_target.pos_xper = target_data["pos_xper"]
 					tmp_target.pos_yper = target_data["pos_yper"]
 					tmp_target.timer = target_data["timer"]
 					tmp_target.update()
-					localmap[world_data].targets.append(tmp_target)
+					localmap[world_name].targets.append(tmp_target)
 				tmp_station = objects.warp_station()
-				tmp_station.x_pos = data["all_world_data"][world_data]["station"]["x_pos"]
-				tmp_station.y_pos = data["all_world_data"][world_data]["station"]["y_pos"]
+				tmp_station.x_pos = world_data["station"]["x_pos"]
+				tmp_station.y_pos = world_data["station"]["y_pos"]
 				tmp_station.update()
-				localmap[world_data].warp1 = tmp_station
+				localmap[world_name].warp1 = tmp_station
 			world = localmap[data["world.name"]]
 		except Exception:
 			print(("Unexpected error:", sys.exc_info()[0]))
