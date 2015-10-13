@@ -10,13 +10,13 @@
                         "6", 
                         "8"
             ], 
-            "player.rel_y": 0.6481389934484809, 
+            "player.rel_y": 0.07938996323793225, 
             "fullscreen": false, 
-            "debugscreen": true, 
-            "screeny_current": 540, 
-            "player.rel_x": 0.38073049264701764, 
-            "screenx_current": 960, 
-            "player.timeplay": 16324, 
+            "debugscreen": false, 
+            "screeny_current": 500, 
+            "player.rel_x": 0.004415121093473239, 
+            "screenx_current": 500, 
+            "player.timeplay": 6887, 
             "debugmode": true, 
             "sounds.music.volume": 0.0
 }

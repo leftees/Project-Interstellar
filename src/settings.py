@@ -242,15 +242,14 @@ def upd(level):
 		global background
 		global background_pos
 		global konstspeed
+		#FIXME: fullscreenold is redundant
 		global fullscreenold
 		global fullscreen
 
-		if fullscreenold != fullscreen:
-			if fullscreen:
-				pygame.display.set_mode((screenx, screeny), pygame.FULLSCREEN)
-			if not fullscreen:
-				pygame.display.set_mode((screenx / 2, screeny / 2))
-			fullscreenold = fullscreen
+		if fullscreen:
+			pygame.display.set_mode((screenx, screeny), pygame.FULLSCREEN)
+		if not fullscreen:
+			pygame.display.set_mode((screenx_current, screeny_current))
 
 		upd("screenvalues")
 
@@ -343,7 +342,7 @@ class data():
 		for world_name in localmap:
 			world_file = open("./saves/%s/%s/world.json" % (name, world_name), "w")
 			pygame.image.save(world_image[world_name],
-					"./saves/%s/%s/background.png" % (name, world_name))
+					"./saves/%s/%s/background.tga" % (name, world_name))
 			json.dump(all_world_data[world_name], world_file, indent=12)
 		json.dump(data, settings_file, indent=12)
 
@@ -374,7 +373,7 @@ class data():
 			from . import worlds
 			localmap = {}
 			for world_name in world_names:
-				background_dir = "./saves/%s/%s/background.png" % (name, world_name)
+				background_dir = "./saves/%s/%s/background.tga" % (name, world_name)
 				background = pygame.image.load(background_dir)
 				world_data = json.load(open("./saves/%s/%s/world.json"
 							% (name, world_name), "r"))
