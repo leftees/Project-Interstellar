@@ -34,8 +34,9 @@ class stars():
 		self.screenx = screenx - self.pos.w
 		self.screeny = screeny - self.pos.h
 		# gives a percentage where star is located
-		self.relative_x = random.randint(-100, int(100 * (self.depth))) / 100.0
-		self.relative_y = random.randint(-100, int(100 * (self.depth))) / 100.0
+		# values between -1 and +1
+		self.relative_x = (random.random() * 2) - 1
+		self.relative_y = (random.random() * 2) - 1
 		self.update(screenx / 1920.0)
 
 	def move(self, x, y):
