@@ -37,9 +37,6 @@ class stars():
 		# values between -1 and +1
 		self.relative_x = (random.random() * 2) - 1
 		self.relative_y = (random.random() * 2) - 1
-		# update determines absolute position
-		self.pointx = 0
-		self.pointy = 0
 		self.update(screenx / 1920.0)
 
 	def move(self, x, y):
@@ -142,6 +139,7 @@ class target():
 		self.kill_entity = False
 		self.inscreen = True
 		self.move(settings.player.pos.x, settings.player.pos.y)
+		self.test = 0
 
 	def update(self):
 		"""Adjusts position according to screen size"""
@@ -193,6 +191,13 @@ class target():
 				settings.screen.blit(self.image, self.pos)
 				return True
 			return False
+
+	def unique_relevant_data(self):
+		data = {}
+		data["timer"] = self.timer
+		data["pos_yper"] = self.pos_yper
+		data["pos_xper"] = self.pos_xper
+		return data
 
 
 class warp_station():
@@ -254,14 +259,20 @@ class warp_station():
 			settings.right = False
 			while test_collide():
 				if settings.player.pos.center[0] < self.pos.center[0]:
-					settings.player.move_pix_ip(-20, 0)
+					settings.player.move_ip(-20, 0)
 				else:
-					settings.player.move_pix_ip(20, 0)
+					settings.player.move_ip(20, 0)
 				if settings.player.pos.center[1] < self.pos.center[1]:
-					settings.player.move_pix_ip(0, -20)
+					settings.player.move_ip(0, -20)
 				else:
-					settings.player.move_pix_ip(0, 20)
+					settings.player.move_ip(0, 20)
 				playerpos = settings.player.pos
 
 	def blit(self):
 		self.screen.blit(self.img, self.pos)
+
+	def unique_relevant_data(self):
+		data = {}
+		data["y_pos"] = self.y_pos
+		data["x_pos"] = self.x_pos
+		return data

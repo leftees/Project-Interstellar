@@ -309,20 +309,12 @@ class data():
 			if not os.path.isdir("./saves/%s/%s" % (name, world_name)):
 				os.makedirs("./saves/%s/%s" % (name, world_name))
 			all_world_data[world_name] = {}
-			all_world_data[world_name]["targets"] = []
-			all_world_data[world_name]["station"] = {}
+			all_world_data[world_name]["targets"] = list()
+			all_world_data[world_name]["station"] = dict()
 			for target in localmap[world_name].targets:
-				savable_vars = {}
-				for inst_var in target.__dict__:
-					if type(target.__dict__[inst_var]) in [list, str, int, float, bool]:
-						savable_vars[inst_var] = target.__dict__[inst_var]
-				all_world_data[world_name]["targets"].append(savable_vars)
-			savable_vars = {}
-			station_vars = localmap[world_name].warp1.__dict__
-			for inst_var in station_vars:
-				if type(station_vars[inst_var]) in [list, str, int, float, bool]:
-					savable_vars[inst_var] = station_vars[inst_var]
-			all_world_data[world_name]["station"] = (savable_vars)
+				all_world_data[world_name]["targets"].append(target.unique_relevant_data())
+			station_data = localmap[world_name].warp1.unique_relevant_data()
+			all_world_data[world_name]["station"] = station_data
 			world_image[world_name] = localmap[world_name].background
 
 		data = {"fullscreen": fullscreen,
