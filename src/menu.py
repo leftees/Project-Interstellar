@@ -3,6 +3,7 @@ from . import settings
 from . import namings
 from . import sounds
 from . import missions
+from . import game_data
 from libs.pyganim import pyganim
 import pygame
 from libs import menu
@@ -195,8 +196,7 @@ def main():
 			if event == "Load Game":
 				savegame = savegames()
 				if savegame is not None:
-					saver = settings.data()
-					saver.load(savegame)
+					game_data.load(savegame)
 					settings.player.move_rel()
 					sounds.music.play("next", 0)
 					settings.upd("get_saves")
@@ -240,15 +240,12 @@ def pause():
 						settings.screeny_current / 2,
 						"Save Game")
 				if savename != "Exit":
-					#TODO: this is ugly
-					saver = settings.data()
-					saver.save(savename)
+					game_data.save(savename)
 				settings.upd("get_saves")
 			if event == "Load Game":
 				savegame = savegames()
 				if savegame is not None:
-					saver = settings.data()
-					saver.load(savegame)
+					game_data.load(savegame)
 					sounds.music.play("unpause")
 					settings.upd("get_saves")
 					settings.upd("adjust_screen")

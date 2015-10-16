@@ -5,9 +5,7 @@ from libs.pyganim import pyganim
 import os
 import shutil
 import sys
-import traceback
 import random
-import json
 
 
 def init():
@@ -282,111 +280,6 @@ def toggle(var, option1, option2):
 	if var == "yep":
 		var = option2
 	return var
-
-
-class data():
-
-	def __init__(self):
-		"""create a new savegame"""
-		pass
-
-	def save(self, name):
-
-		from . import sounds
-		name = name.encode("utf-8")
-		# removes invalid characters
-		if "/" in name:
-			name = name.replace("/", "\\")
-		if "%" in name:
-			name = name.replace("%", "")
-
-		if not os.path.isdir("./saves/%s/" % name):
-			os.makedirs("./saves/%s/" % name)
-
-		all_world_data = {}
-		world_image = {}
-		for world_name in localmap:
-			if not os.path.isdir("./saves/%s/%s" % (name, world_name)):
-				os.makedirs("./saves/%s/%s" % (name, world_name))
-			all_world_data[world_name] = {}
-			all_world_data[world_name]["targets"] = list()
-			all_world_data[world_name]["station"] = dict()
-			for target in localmap[world_name].targets:
-				all_world_data[world_name]["targets"].append(target.unique_relevant_data())
-			station_data = localmap[world_name].warp1.unique_relevant_data()
-			all_world_data[world_name]["station"] = station_data
-			world_image[world_name] = localmap[world_name].background
-
-		data = {"fullscreen": fullscreen,
-			"screenx_current": screenx_current,
-			"screeny_current": screeny_current,
-			"debugmode": debugmode,
-			"debugscreen": debugscreen,
-			"player.rel_x": player.rel_x,
-			"player.rel_y": player.rel_y,
-			"sounds.music.volume": sounds.music.volume,
-			"player.timeplay": player.timeplay,
-			"world.name": world.name,
-			"worlds": list(localmap.keys())
-			}
-
-		settings_file = open("./saves/" + name + "/Data.json", "w")
-		for world_name in localmap:
-			world_file = open("./saves/%s/%s/world.json" % (name, world_name), "w")
-			pygame.image.save(world_image[world_name],
-					"./saves/%s/%s/background.tga" % (name, world_name))
-			json.dump(all_world_data[world_name], world_file, indent=12)
-		json.dump(data, settings_file, indent=12)
-
-	def load(self, name):
-		"""Load savegame"""
-		from . import sounds
-		from . import objects
-		global fullscreen
-		global screenx_current
-		global screeny_current
-		global debugmode
-		global debugscreen
-		global localmap
-		global world
-		try:
-			data = json.load(open("./saves/" + unicode(name) + "/Data.json", "r"))
-			fullscreen = data["fullscreen"]
-			screenx_current = data["screenx_current"]
-			screeny_current = data["screeny_current"]
-			debugmode = data["debugmode"]
-			debugscreen = data["debugscreen"]
-			player.rel_x = data["player.rel_x"]
-			player.rel_y = data["player.rel_y"]
-			sounds.music.volume = data["sounds.music.volume"]
-			player.timeplay = data["player.timeplay"]
-			world_names = data["worlds"]
-
-			from . import worlds
-			localmap = {}
-			for world_name in world_names:
-				background_dir = "./saves/%s/%s/background.tga" % (name, world_name)
-				background = pygame.image.load(background_dir)
-				world_data = json.load(open("./saves/%s/%s/world.json"
-							% (name, world_name), "r"))
-				localmap[world_name] = worlds.world(world_name)
-				localmap[world_name].generate(background, dstars, 0)
-				for target_data in world_data["targets"]:
-					tmp_target = objects.target()
-					tmp_target.pos_xper = target_data["pos_xper"]
-					tmp_target.pos_yper = target_data["pos_yper"]
-					tmp_target.timer = target_data["timer"]
-					tmp_target.update()
-					localmap[world_name].targets.append(tmp_target)
-				tmp_station = objects.warp_station()
-				tmp_station.x_pos = world_data["station"]["x_pos"]
-				tmp_station.y_pos = world_data["station"]["y_pos"]
-				tmp_station.update()
-				localmap[world_name].warp1 = tmp_station
-			world = localmap[data["world.name"]]
-		except Exception:
-			print(("Unexpected error:", sys.exc_info()[0]))
-			print((traceback.format_exc()))
 
 
 def quit():
