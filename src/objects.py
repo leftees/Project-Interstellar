@@ -3,7 +3,6 @@ import pygame
 import random
 import math
 from . import settings
-from . import menu
 from pygame.locals import *
 
 """Classes for creating objects"""
@@ -245,6 +244,7 @@ class warp_station():
 			return test
 		if test_collide():
 			# Warps to the selected world and gets a bit pushed off the station
+			from . import menu
 			selected_num = menu.choose_world()
 			if selected_num >= 0:
 				settings.world = settings.localmap[selected_num]
