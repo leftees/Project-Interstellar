@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import pygame
 import math
+from libs.pyganim import pyganim
 from ConfigParser import SafeConfigParser
 
 
@@ -23,6 +24,11 @@ class player():
 		self.timeplay = 0  # Time player has played
 		self.update = True  # If yes new image gets loaded
 		self.speedboost = 1
+		explosion_files = pyganim.getImagesFromSpriteSheet(
+							"./assets/sprites/explosions/ship_expl.png",
+							width=256, height=256)
+		explosion_attr = [(anim_file, 40) for anim_file in explosion_files]
+		self.explosion = pyganim.PygAnimation(explosion_attr, loop=False)
 
 	def create_images(self, name):
 		"""creates new images from one image for the player"""
@@ -188,6 +194,12 @@ class player():
 
 	def blit(self, screen):
 		screen.blit(self.img, self.pos)
+
+	def explode(self):
+		self.rotation = 0
+		if self.explosion.state == "stopped":
+			self.explosion.play()
+		self.img = self.explosion.getCurrentFrame()
 
 	def reset(self):
 		self.should_move = False
