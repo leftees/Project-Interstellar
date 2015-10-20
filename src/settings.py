@@ -109,7 +109,7 @@ def init():
 	konstspeed = 0.0025
 	fullscreen = False
 	debugscreen = False
-	debugmode = False
+	debugmode = True
 	dstars = 500
 	isnear = "False"
 	code = ""
@@ -143,25 +143,22 @@ def init():
 		# fullscreen = False
 		pass
 
-	def get_anim_source(num, quantity):
-		animationsourcetmp = []
-		if num >= 10:
-			num = str(num)
-		else:
-			num = "0" + str(num)
-		for a in range(quantity):
-			a = str(a)
-			if int(a) < 10:
-				a = "0" + str(a)
-			tmp = ("./assets/sprites/explosions/expl_" + num + "_00" + a + ".tif", 0.04)
-			animationsourcetmp.append(tmp)
-		return animationsourcetmp
-
-	explosion9 = pyganim.PygAnimation(get_anim_source(9, 32), loop=False)
-	explosion10 = pyganim.PygAnimation(get_anim_source(10, 32), loop=False)
-	explosion11 = pyganim.PygAnimation(get_anim_source(11, 24), loop=False)
-	explosions = [explosion9, explosion10, explosion11]
 	explosions_disp = []
+	explosions = []
+	for a in range(3):
+		this_width = 128
+		this_height = 128
+		if a == 2:
+			this_width = 96
+			this_height = 96
+		num = str(a + 9)
+		if a == 0:
+			num = "0" + num
+		explosion_files = pyganim.getImagesFromSpriteSheet(
+							"./assets/sprites/explosions/expl_" + num + ".png",
+							width=this_width, height=this_height)
+		explosion_attr = [(anim_file, 40) for anim_file in explosion_files]
+		explosions.append(pyganim.PygAnimation(explosion_attr, loop=False))
 
 	saves = []
 	for filename in os.listdir("./saves"):

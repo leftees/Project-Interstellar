@@ -1,3 +1,0 @@
-Pyganim is made by Al Sweigart al@inventwithpython.com
-http://inventwithpython.com/pyganim
-Released under a "Simplified BSD" license
