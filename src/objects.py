@@ -170,6 +170,7 @@ class target():
 		if self.pos.colliderect(bulletrect) and not self.gothit:
 			self.pos_x -= self.explosion.getRect().w / 2.0
 			self.pos_y -= self.explosion.getRect().h / 2.0
+			self.pos.size = self.explosion.getRect().size
 			self.explosion.play()
 			self.gothit = True
 
