@@ -63,12 +63,14 @@ class world():
 				target.test_ishit(bullet.pos)
 			if target.gothit:
 				self.targets.remove(target)
+				#TODO: move from settings to here
 				settings.explosions_disp.append(target)
 				settings.explosions_disp = list(set(settings.explosions_disp))
 
 		for explosion in settings.explosions_disp:
 			if explosion.kill_entity:
 				settings.explosions_disp.remove(explosion)
+				pass
 			else:
 				explosion.move(player_pos.left, player_pos.top)
 

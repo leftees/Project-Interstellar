@@ -24,11 +24,7 @@ class player():
 		self.timeplay = 0  # Time player has played
 		self.update = True  # If yes new image gets loaded
 		self.speedboost = 1
-		explosion_files = pyganim.getImagesFromSpriteSheet(
-							"./assets/sprites/explosions/ship_expl.png",
-							width=256, height=256)
-		explosion_attr = [(anim_file, 40) for anim_file in explosion_files]
-		self.explosion = pyganim.PygAnimation(explosion_attr, loop=False)
+		self.explosion_anim = None
 
 	def create_images(self, name):
 		"""creates new images from one image for the player"""
@@ -192,14 +188,24 @@ class player():
 		self.img = self.playerup
 		self.select_picture()
 
-	def blit(self, screen):
-		screen.blit(self.img, self.pos)
-
 	def explode(self):
-		self.rotation = 0
-		if self.explosion.state == "stopped":
-			self.explosion.play()
-		self.img = self.explosion.getCurrentFrame()
+		self.speedboost = 0
+		explosion_img = pyganim.getImagesFromSpriteSheet(
+				"./assets/sprites/explosions/ship_expl.png",
+				width=256, height=256)
+		explosion_attr = [(anim_file, 40) for anim_file in explosion_img]
+		self.explosion_anim = pyganim.PygAnimation(explosion_attr, loop=False)
+		self.explosion_anim.play()
+
+	def blit(self, screen):
+		if self.explosion_anim is None:
+			screen.blit(self.img, self.pos)
+		else:
+			self.update = False
+			pos = self.pos.copy()
+			pos.x -= self.explosion_anim.getMaxSize()[0] / 2
+			pos.y -= self.explosion_anim.getMaxSize()[1] / 2
+			self.explosion_anim.blit(screen, pos)
 
 	def reset(self):
 		self.should_move = False

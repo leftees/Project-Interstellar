@@ -148,14 +148,28 @@ def main():
 	class create_planet():
 
 		def __init__(self, screenx, screeny):
-			planets = []
-			src = "./assets/sprites/spinning_planet/planet-"
-			for num in range(150):
-				planets.append((src + str(num) + ".png", 0.065))
-			planet = pyganim.PygAnimation(planets)
-			planet.rotate(20)
+			planet_sprite_part1 = pyganim.getImagesFromSpriteSheet(
+								"./assets/sprites/spinning_planet/planet_part-0.png",
+								width=384, height=384)
+			planet_sprite_part2 = pyganim.getImagesFromSpriteSheet(
+								"./assets/sprites/spinning_planet/planet_part-1.png",
+								width=384, height=384)
+			planet_sprite_part3 = pyganim.getImagesFromSpriteSheet(
+								"./assets/sprites/spinning_planet/planet_part-2.png",
+								width=384, height=384)
+			planet_sprite_part4 = pyganim.getImagesFromSpriteSheet(
+								"./assets/sprites/spinning_planet/planet_part-3.png",
+								width=384, height=384)
+			planet_sprite_part5 = pyganim.getImagesFromSpriteSheet(
+								"./assets/sprites/spinning_planet/planet_part-4.png",
+								width=384, height=384)
+			planet_sprite = (planet_sprite_part1 + planet_sprite_part2
+					+ planet_sprite_part3 + planet_sprite_part4
+					+ planet_sprite_part5)
+			planet_sprite_and_attr = [(anim_file, 65) for anim_file in planet_sprite]
+			planet = pyganim.PygAnimation(planet_sprite_and_attr)
 			planet.scale((int(0.2 * screenx), int(0.2 * screenx)))
-			planet_pos = planet.getRect()
+			planet_pos = pygame.Rect((0, 0), (384, 384))
 			self.planet_pos = planet_pos.move(int(screenx * 0.7), int(screeny * 0.4))
 			planet.play()
 			self.planet = planet

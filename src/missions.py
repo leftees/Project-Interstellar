@@ -1,18 +1,16 @@
 # -*- coding: utf-8 -*-
 from . import settings
 import pygame
-from pygame.locals import *
+import math
 
 
 def init():
-	global newtime
-	newtime = pygame.time.get_ticks()
+	time("ingame")
 
 
-def handle(usage):
-
-	global newtime
-
+def time(usage):
+	if not "newtime" in locals():
+		newtime = pygame.time.get_ticks()
 	if usage == "ingame":
 		oldtime = newtime
 		newtime = pygame.time.get_ticks()
@@ -20,6 +18,15 @@ def handle(usage):
 	if usage == "pause":
 		oldtime = pygame.time.get_ticks()
 		newtime = pygame.time.get_ticks()
+
+
+def handle(usage):
+	time("ingame")
+	target_shooting()
+	player_hit_by_explosion()
+
+
+def target_shooting():
 
 	alltargets = 0
 	for world in settings.localmap:
@@ -34,8 +41,6 @@ def handle(usage):
 			movement.handle()
 
 		screen = settings.screen
-
-		settings.save(settings.current_game)
 
 		fade = pygame.Surface((settings.screenx_current, settings.screeny_current))
 		fade.fill((0, 0, 0))
@@ -59,9 +64,9 @@ def handle(usage):
 			settings.upd("get_events")
 
 			for event in settings.events:
-				if event.type == QUIT:
+				if event.type == pygame.QUIT:
 					settings.quit()
-				if event.type == KEYDOWN:
+				if event.type == pygame.KEYDOWN:
 					key = pygame.key.name(event.key)
 					if key == "escape" or key == "return":
 						settings.run = False
@@ -71,3 +76,22 @@ def handle(usage):
 			screen.blit(texttime, textrect)
 			screen.blit(texttt, textrectpertarget)
 			pygame.display.flip()
+
+
+def player_hit_by_explosion():
+
+	# need to be globals so it is are preserved everytime this is called
+	global running
+
+	for explosion in settings.explosions_disp:
+		distance = math.sqrt(
+				(explosion.pos.centerx - settings.player.pos.centerx) ** 2
+				+ (explosion.pos.centery - settings.player.pos.centery) ** 2)
+
+		if distance <= 20 and (not ("running" in globals())):
+			running = "Wow this variable exists"
+			settings.player.explode()
+	if settings.player.explosion_anim is not None:
+		if (settings.player.explosion_anim.state in ["paused", "stopped"]
+			or settings.player.explosion_anim.isFinished()):
+				settings.quit()
