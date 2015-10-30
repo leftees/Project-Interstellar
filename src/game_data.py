@@ -9,7 +9,7 @@ from . import sounds
 from . import objects
 
 
-def save(self, name):
+def save(name):
 
 	name = name.encode("utf-8")
 	# removes invalid characters
@@ -57,7 +57,7 @@ def save(self, name):
 	json.dump(data, settings_file, indent=12)
 
 
-def load(self, name):
+def load(name):
 	"""Load savegame"""
 
 	try:

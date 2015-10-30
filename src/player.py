@@ -70,7 +70,7 @@ class player():
 		if self.rotation == 315:
 			self.img = self.playeruple
 
-	def move_pix_ip(self, addx, addy):
+	def move_abs(self, addx, addy):
 		#lint:disable
 		self.rel_x = (self.pos.x + addx) / float(settings.screenx_current)
 		self.rel_y = (self.pos.y + addy) / float(settings.screeny_current)

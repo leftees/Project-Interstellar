@@ -171,6 +171,8 @@ class target():
 			self.pos_y -= self.explosion.getRect().h / 2.0
 			self.explosion.play()
 			self.gothit = True
+			while self.explosion.state in ["stopped", "paused"]:
+				self.explosion.play()
 
 	def blit(self):
 		"""Blits target and explosion"""
@@ -259,13 +261,13 @@ class warp_station():
 			settings.right = False
 			while test_collide():
 				if settings.player.pos.center[0] < self.pos.center[0]:
-					settings.player.move_ip(-20, 0)
+					settings.player.move_abs(-20, 0)
 				else:
-					settings.player.move_ip(20, 0)
+					settings.player.move_abs(20, 0)
 				if settings.player.pos.center[1] < self.pos.center[1]:
-					settings.player.move_ip(0, -20)
+					settings.player.move_abs(0, -20)
 				else:
-					settings.player.move_ip(0, 20)
+					settings.player.move_abs(0, 20)
 				playerpos = settings.player.pos
 
 	def blit(self):
