@@ -25,7 +25,7 @@ try:
 			break
 		if int(required[index]) > int(version[index]):
 			raise SystemExit("Outdated Python version: " + ".".join(version))
-	if sys.version[:5] >= "3.0.0":
+	if sys.version[:1] >= "3":
 		raise SystemExit("No support for Python3")
 
 	# Run the game

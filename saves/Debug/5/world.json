@@ -1,0 +1,65 @@
+{
+            "station": {
+                        "y_pos": 0.5116669149099174, 
+                        "anchorx": 1371, 
+                        "x_pos": 0.7937797066355374, 
+                        "anchory": 454
+            }, 
+            "targets": [
+                        {
+                                    "pos_x": 514.8885009269158, 
+                                    "pos_y": 312.3226966005269, 
+                                    "pos_xper": 0.2724277782682094, 
+                                    "chooser": false, 
+                                    "kill_entity": false, 
+                                    "timer": 5764, 
+                                    "pos_yper": 0.29745018723859706, 
+                                    "inscreen": true, 
+                                    "gothit": false
+                        }, 
+                        {
+                                    "pos_x": 604.51501858859, 
+                                    "pos_y": 627.0156772463722, 
+                                    "pos_xper": 0.3198492161844392, 
+                                    "chooser": false, 
+                                    "kill_entity": false, 
+                                    "timer": 5730, 
+                                    "pos_yper": 0.5971577878536878, 
+                                    "inscreen": true, 
+                                    "gothit": false
+                        }, 
+                        {
+                                    "pos_x": 1175.3960878813232, 
+                                    "pos_y": 386.5673368281188, 
+                                    "pos_xper": 0.6219026920007001, 
+                                    "chooser": false, 
+                                    "kill_entity": false, 
+                                    "timer": 5584, 
+                                    "pos_yper": 0.3681593684077322, 
+                                    "inscreen": true, 
+                                    "gothit": false
+                        }, 
+                        {
+                                    "pos_x": 1641.0001263435406, 
+                                    "pos_y": 132.69347242285403, 
+                                    "pos_xper": 0.8682540351024024, 
+                                    "chooser": false, 
+                                    "kill_entity": false, 
+                                    "timer": 5939, 
+                                    "pos_yper": 0.12637473564081336, 
+                                    "inscreen": true, 
+                                    "gothit": false
+                        }, 
+                        {
+                                    "pos_x": 1498.9513532837843, 
+                                    "pos_y": 808.8019959349243, 
+                                    "pos_xper": 0.7930959541184044, 
+                                    "chooser": false, 
+                                    "kill_entity": false, 
+                                    "timer": 5961, 
+                                    "pos_yper": 0.7702876151761184, 
+                                    "inscreen": true, 
+                                    "gothit": false
+                        }
+            ]
+}

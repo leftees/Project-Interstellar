@@ -3,7 +3,6 @@ import pygame
 import random
 import math
 from . import settings
-from . import menu
 from pygame.locals import *
 
 """Classes for creating objects"""
@@ -173,6 +172,8 @@ class target():
 			self.pos.size = self.explosion.getRect().size
 			self.explosion.play()
 			self.gothit = True
+			while self.explosion.state in ["stopped", "paused"]:
+				self.explosion.play()
 
 	def blit(self):
 		"""Blits target and explosion"""
@@ -192,6 +193,13 @@ class target():
 				settings.screen.blit(self.image, self.pos)
 				return True
 			return False
+
+	def unique_relevant_data(self):
+		data = {}
+		data["timer"] = self.timer
+		data["pos_yper"] = self.pos_yper
+		data["pos_xper"] = self.pos_xper
+		return data
 
 
 class warp_station():
@@ -239,6 +247,7 @@ class warp_station():
 			return test
 		if test_collide():
 			# Warps to the selected world and gets a bit pushed off the station
+			from . import menu
 			selected_num = menu.choose_world()
 			if selected_num >= 0:
 				settings.world = settings.localmap[selected_num]
@@ -253,14 +262,20 @@ class warp_station():
 			settings.right = False
 			while test_collide():
 				if settings.player.pos.center[0] < self.pos.center[0]:
-					settings.player.move_ip(-20, 0)
+					settings.player.move_abs(-20, 0)
 				else:
-					settings.player.move_ip(20, 0)
+					settings.player.move_abs(20, 0)
 				if settings.player.pos.center[1] < self.pos.center[1]:
-					settings.player.move_ip(0, -20)
+					settings.player.move_abs(0, -20)
 				else:
-					settings.player.move_ip(0, 20)
+					settings.player.move_abs(0, 20)
 				playerpos = settings.player.pos
 
 	def blit(self):
 		self.screen.blit(self.img, self.pos)
+
+	def unique_relevant_data(self):
+		data = {}
+		data["y_pos"] = self.y_pos
+		data["x_pos"] = self.x_pos
+		return data
