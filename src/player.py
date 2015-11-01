@@ -13,8 +13,8 @@ class player():
 		self.speed = 15  # Speed of player (redunant see self.new_ship())
 
 		self.rotation = 0  # Current player rotation
-		self.new_ship("Player1")
-		self.pos = self.img.get_rect()  # Absolute player position
+		# Absolute player position. size is calculated when image gets loaded
+		self.pos = pygame.Rect(0, 0, 0, 0)
 		self.rot_dest = 0  # Where the player should turn
 		self.should_move = False  # Determines wether player should move
 		self.move_x = 0  # Delta pixel per tick (x)
@@ -25,6 +25,7 @@ class player():
 		self.update = True  # If yes new image gets loaded
 		self.speedboost = 1
 		self.explosion_anim = None
+		self.new_ship("Player1")
 
 	def create_images(self, name):
 		"""creates new images from one image for the player"""
@@ -52,7 +53,7 @@ class player():
 		self.playerle = pygame.image.load(folder + name + "_le.png")
 		self.playeruple = pygame.image.load(folder + name + "_uple.png")
 
-	def select_picture(self):
+	def select_img(self):
 		"""changes the playerimage corresponding to the movement direction"""
 
 		if self.rotation == 0 or self.rotation == 360:
@@ -151,7 +152,7 @@ class player():
 		# updates player image if neccesary
 		if self.update:
 			self.update = False
-			self.select_picture()
+			self.select_img()
 
 	def select_angle(self, up, down, left, right):
 
@@ -195,7 +196,8 @@ class player():
 		self.speed = config.getfloat("main", "speed")
 		self.create_images(name)
 		self.img = self.playerup
-		self.select_picture()
+		self.select_img()
+		self.pos.size = self.img.get_size()
 
 	def explode(self):
 		self.speedboost = 0
