@@ -21,14 +21,29 @@ def init():
 def handle():
 
 	# handles user input
-	# i think nothing to explain here
+	#TODO: Add docs
 
+	#If debugging is active, midi-events will be qued to event-list
 	if settings.debugmode:
 		midi_in.do()
 
+	#Translates events to actions or settings
+	process_events()
+
+	#Handles advanced interfaces
+	specials.update()
+
+
+def process_events():
+	"""This function translates all events in settings.events to in-game Signals.
+
+	It has no Arguments to pass and returns nothing."""
+
 	for event in settings.events:
+		#Close cross clicked etc.
 		if event.type == QUIT:
 			exit()
+		#Deacitates the holding state of certain keys
 		if event.type == KEYUP:
 			key = pygame.key.name(event.key)
 			if key == "x" or key == "y":
@@ -41,7 +56,7 @@ def handle():
 				settings.left = False
 			if key == "d" or key == "right":
 				settings.right = False
-
+		#Handles keypresses
 		if event.type == KEYDOWN:
 			key = pygame.key.name(event.key)
 			if key == "escape":
@@ -70,32 +85,43 @@ def handle():
 					pygame.mixer.music.load("./assets/music/$not$ard_tatort.ogg")
 					pygame.mixer.music.play(1, 0.0)
 			if key == "f" or key == "space":
-				tmp = objects.bullet(settings.player.rotation, settings.player.pos)
-				settings.bullets.append(tmp)
+				tmp_bullet = objects.bullet(settings.player.rotation, settings.player.pos)
+				settings.bullets.append(tmp_bullet)
 			if key == "c":
 				specials.fire = True
+			#These are debugging relevant interfaces
 			if settings.debugmode:
+				#reloads the screen variables
 				if key == "r":
 					settings.world.adjust_to_screen()
+				#Resets settings
 				if key == "q":
 					settings.init()
+				#Toggles the psychomode
 				if key == "p":
 					settings.psycomode = settings.toggle(settings.psycomode, True, False)
+				#Mutes all sounds
 				if key == "q":
 					settings.volume = 0
+				#Changes ship
 				if key == "n":
 					settings.player.new_ship("ship_2")
+				#Tags all targets as being shot
 				if key == "t":
 					for target in settings.world.targets:
 						target.test_ishit(pygame.Rect((-1000, -1000), (3000, 3000)))
+				#regenerates the world
 				if key == "g":
 					settings.localmap["1"].generate(settings.localmap["1"].background,
 								settings.dstars, settings.dtargets)
 					settings.world.generate(settings.world.background,
 								settings.dstars, settings.dtargets)
+				#Prints location of target
 				if key == "h":
 					for target in settings.world.targets:
 						print((target.pos))
+				#Numpad presses
+				#Switches between worlds
 				if len(key) == 3 and settings.debugmode:
 					if key[0] == "[" and key[2] == "]":
 						num = int(key[1])
@@ -104,14 +130,10 @@ def handle():
 								num -= 1
 							settings.world = settings.localmap[str(num)]
 
-		settings.player.select_angle(settings.up, settings.down,
-				settings.left, settings.right)
-
-		specials.update()
-
 
 def getall(allkeys):
 	"""Gets all pressed keys"""
+	#TODO: Find better use
 	for event in settings.events:
 		if event.type == QUIT:
 			exit()

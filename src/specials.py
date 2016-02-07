@@ -23,6 +23,7 @@ def update():
 	global fire
 	global energy
 
+	#TODO:find alternative to disabling lint
 	#lint:disable
 	if energy < 100:
 		energy += 1
@@ -72,9 +73,9 @@ def update():
 				angle -= 360
 			diffangle = 360.0 / amount
 			for a in range(amount):
-				tmpan = angle
+				tmp_an = angle
 				if direction != "Clock":
-					tmpan = 360 - tmpan
-				tmp = objects.bullet(a * diffangle + tmpan, settings.player.pos)
+					tmp_an = 360 - tmp_an
+				tmp = objects.bullet(a * diffangle + tmp_an, settings.player.pos)
 				settings.bullets.append(tmp)
 	#lint:enable

@@ -103,6 +103,12 @@ class player():
 		if self.rotation < 0:
 			self.rotation += 360
 
+		#Turns player to according rotation
+		#lint:disable
+		select_angle(settings.up, settings.down,
+			settings.left, settings.right)
+		#lint:enable
+
 		# handles rotation and gives signal to update player image/surface
 		if self.rotation != self.rot_dest:
 			self.update = True
