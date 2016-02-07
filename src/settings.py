@@ -181,7 +181,7 @@ def init():
 	if aspect_ratio > 16.0 / 9:
 		ratio = screenx_current / float(background.get_size()[1])
 		pygame.transform.smoothscale(background,
-					(screenx_current, screeny_current * ratio))
+					(screenx_current, int(screeny_current * ratio)))
 	elif aspect_ratio < 16.0 / 9:
 		ratio = screeny_current / float(background.get_size()[0])
 		pygame.transform.smoothscale(background,
