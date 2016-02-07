@@ -1,0 +1,17 @@
+#safety copies
+**~
+
+#"compiled" python
+**.pyo
+**.pyc
+
+#Custom ignored files
+**~.*
+~**.*
+
+#empty folders
+screenshots/*
+assets/sprites/player/*
+
+#symlinks in testing folder
+src/tests/settings.py
