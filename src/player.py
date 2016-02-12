@@ -105,7 +105,7 @@ class player():
 
 		#Turns player to according rotation
 		#lint:disable
-		select_angle(settings.up, settings.down,
+		self.select_angle(settings.up, settings.down,
 			settings.left, settings.right)
 		#lint:enable
 
