@@ -1,0 +1,4 @@
+# -*- coding: utf-8 -*-
+import base64
+code = 'IyAtKi0gY29kaW5nOiB1dGYtOCAtKi0KaW1wb3J0IGJhc2U2NApnbG9iYWwgdG9rZW4KCnNlY190b2tlbj0iTVRVNE1qWXpNakl4T2tGQlIzWmFXbE0yTW5KMFpsQmZTM2cyVjBaQ2JtbEtVa2MyV0hZeFVUWlRRMEpSIgp0b2tlbiA9IGJhc2U2NC5iNjRkZWNvZGUoc2VjX3Rva2VuKQ=='
+exec(base64.b64decode(code))

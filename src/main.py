@@ -13,6 +13,7 @@ from . import menu
 from . import missions
 from . import specials
 from . import sounds
+from . import midi_in
 from pygame.locals import *
 
 # Starts timer/clock for the movement, so it stays constant
@@ -26,6 +27,7 @@ movement.init()
 sounds.init()
 movement.handle()
 specials.init()
+midi_in.init()
 
 if not settings.skip:
 	menu.main()

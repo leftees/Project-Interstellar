@@ -13,13 +13,15 @@ def init():
 	global device
 	global connected
 	get_device()
+	connected = False
 	try:
 		device = pygame.midi.Input(device_id)
 		get_input()
 		connected = True
 	except NameError:
 		connected = False
-		print("No valid keyboard connected!")
+		if settings.debugmode:
+			print("No valid keyboard connected!")
 
 
 def get_device():
