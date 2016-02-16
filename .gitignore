@@ -9,6 +9,12 @@
 **~.*
 ~**.*
 
+#Ninja project file
+*.nja
+
+#Gitignore
+.gitignore
+
 #empty folders
 screenshots/*
 assets/sprites/player/*

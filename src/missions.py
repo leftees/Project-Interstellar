@@ -95,3 +95,10 @@ def player_hit_by_explosion():
 		if (settings.player.explosion_anim.state in ["paused", "stopped"]
 			or settings.player.explosion_anim.isFinished()):
 				settings.quit()
+
+
+def play_failed_sequence():
+
+	#TODO:
+	#introduce game over screen
+	pass

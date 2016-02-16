@@ -2,7 +2,8 @@ Licenses: (Thank you to all who make such things public avalible ;) Be sure to c
 
 
 The python pygame library "Pyganim" in ./libs/pyganim is made by Al Sweigart and released under a "Simplified BSD" license. [ al@inventwithpython.com http://inventwithpython.com/pyganim ]
-The (slightly modified)library "Tygamusic" in ./libs/tygamusic is made by me and released under a Creative Commons Attribution 3.0 license. Visit http://creativecommons.org/licenses/by/3.0/ for detailed info.
+The (slightly modified)library "Tygamusic" in ./libs/tygamusic is made by me and released under a "Creative Commons Attribution 3.0" license. Visit http://creativecommons.org/licenses/by/3.0/ for detailed information.
+The Telegram bot python interface "python-telegram-bot" in ./libs/telegram is made by Leandro Toledo and released under a "LGPL-3" (Lesser GPL 3). Visit https://gnu.org/licenses/lgpl.html for detailed information-
 
 "Free Ambient Loop" by Sweetwaveaudio is licensed under a Creative Commons Licence. [ www.sweetwaveaudio.co.uk , http://creativecommons.org/licenses/by/3.0/ ]
 "Chibi Ninja" by Eric Skiff is licensed under a Creative Commons Attribution License. [ http://freemusicarchive.org/music/Eric_Skiff/ , http://creativecommons.org/licenses/by/3.0/ ]
