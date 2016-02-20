@@ -12,7 +12,6 @@ from pygame.locals import *
 def init():
 	"""Some variable initializing"""
 	# nothing to explain here
-	global fullscreenold
 	global playerup
 	global alpha
 	global no16to9
@@ -21,7 +20,6 @@ def init():
 	global show
 
 	alpha = 0
-	settings.fullscreenold = settings.fullscreen
 	no16to9 = False
 	show = 0
 	if settings.aspect_ratio != 16.0 / 9:

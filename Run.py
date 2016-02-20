@@ -4,27 +4,12 @@ Used to start the Game and ensure that everythings works fine.
 Otherwise it reports an errormessage.
 """
 
+import error_report
 try:
 	import pygame
 	import sys
 	import traceback
 	import os
-	try:
-		import telegram
-	except:
-		print("Telegram not installed. No support for errors!")
-	#TODO: deliver with api preinstalled
-	#from libs.telegram import telegram
-
-	import READ_BEFORE_START
-	permission = READ_BEFORE_START.allow_data_collection
-	if permission not in [1, -1]:
-		print(("Please read the READ_BEFORE_START"))
-		exit()
-	if permission == 1:
-		pass
-	if permission == -1:
-		print(("Error handling disabled :("))
 
 	os.environ['SDL_VIDEO_CENTERED'] = '1'
 
@@ -47,40 +32,25 @@ try:
 	# Run the game
 	from src import main
 	main.void()
-
-except:
-	pass
-	#this was commented out later due to legal reasons
-#	import data as get_data
-#	info = sys.exc_info()
-#	error_type = info[1].__class__.__name__
-#	trace = traceback.format_exc(info[2])
-#	info_text = ("An error occured at client! \nTrace:\n%s\nError_Type:\n%s"
-#					% (trace, error_type))
-#	bot = telegram.Bot(token=get_data.token)
-#	bot.sendMessage(chat_id=158887423, text=info_text)
-
-## Handeling errors
-#except ImportError as message:
-	#if str(message)[len(str(message)) - 6:] == "pygame":  # pygame not installed
-		#raise SystemExit("Pygame not installed")
-	#else:
-		## unknown import error
-		#print (("ERROR IMPORTING MODULES: %s" % message))
-		#raise SystemExit(traceback.format_exc())
-#except AttributeError as detail:
-	## excuted if font module is not installed
-	#detail = str(detail)
-	#print(detail)
-	#if detail[len(detail) - 5:][:4] == "font":  # Basicly the name of the module
-		#raise SystemExit("Font module not installed (SDL_ttf)!")
-	#else:
-		#print(("Unexpected error:", sys.exc_info()[0]))
-		#print("")
-		#raise SystemExit(traceback.format_exc())
-#except Exception as detail:
-	## general errors
-	#print(("Unexpected error:", sys.exc_info()[0]))
-	#print("")
-	#raise SystemExit(traceback.format_exc())
-#
+# Handeling errors
+except ImportError as message:
+	if str(message)[len(str(message)) - 6:] == "pygame":  # pygame not installed
+		raise SystemExit("Pygame not installed")
+	else:
+		# unknown import error
+		report = (("ERROR IMPORTING MODULES: %s" % message))
+		print((report))
+		error_report.send("Missing library at client:\n" + report)
+		raise SystemExit(traceback.format_exc())
+except AttributeError as detail:
+	# excuted if font module is not installed
+	detail = str(detail)
+	print(detail)
+	if detail[len(detail) - 5:][:4] == "font":  # Checking if font is cause
+		raise SystemExit("Font module not installed (SDL_ttf)!")
+	else:
+		raise Exception(traceback.format_exc())  # Passing error to general handler
+except Exception as detail:
+	# general errors
+	error_report.send(traceback.format_exc())
+	raise SystemExit(traceback.format_exc())

@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from pygame.locals import *
+#from pygame.locals import *
 from . import settings
 
 """This handles the movement of nearly everything"""

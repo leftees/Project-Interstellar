@@ -3,7 +3,7 @@ import pygame
 import random
 import math
 from . import settings
-from pygame.locals import *
+#from pygame.locals import *
 
 """Classes for creating objects"""
 

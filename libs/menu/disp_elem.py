@@ -1,7 +1,6 @@
-# lint:ok
 # -*- coding: utf-8 -*-
 import pygame
-from pygame.locals import *
+from pygame.locals import MOUSEBUTTONUP, MOUSEBUTTONDOWN, USEREVENT, QUIT, KEYDOWN
 import string
 
 
@@ -62,6 +61,7 @@ class button():
 			contentpos = content.get_rect()
 
 			# creating emtpy surface that is the size of the desired button
+			self.ratio = ratio
 			tmp_centertext_image = pygame.Surface((contentpos.h * ratio,
 						contentpos.h)).convert_alpha()
 			tmp_centertext_image.fill((0, 0, 0, 0))
@@ -107,7 +107,7 @@ class button():
 		self.move(self.pos.x - self.pos.w / 2,
 			self.pos.y - self.pos.h / 2)
 
-	def changetext(self, text, color):
+	def changetext(self, text, color, ratio):
 		"""Changes the text inside the button"""
 		# renders the text and creates a rect
 		content = self.font.render(text, True, color)

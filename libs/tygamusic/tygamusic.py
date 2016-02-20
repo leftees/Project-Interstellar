@@ -11,7 +11,7 @@ So please be carefull…
 
 import os
 import pygame
-from pygame.locals import *
+from pygame.locals import USEREVENT
 import random
 
 

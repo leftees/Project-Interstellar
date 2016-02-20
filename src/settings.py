@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import pygame
-from pygame.locals import *
+from pygame.locals import USEREVENT
 from libs.pyganim import pyganim
 import os
 import shutil
@@ -106,7 +106,7 @@ def init():
 	konstspeed = 0.0025
 	fullscreen = False
 	debugscreen = False
-	debugmode = False
+	debugmode = True
 	dstars = 500
 	isnear = "False"
 	code = ""
@@ -197,7 +197,7 @@ def reset():
 	pygame.event.set_grab(False)
 	pygame.mouse.set_visible(False)
 
-	player.reset()
+	player.reset()  # lint:ok
 
 	konstspeed = 0.0025
 	color = (255, 255, 10)
@@ -205,10 +205,10 @@ def reset():
 	from . import missions
 	missions.handle("pause")
 
-	if debugmode:
+	if debugmode:  # lint:ok
 		fullscreen = False  # lint:ok
 
-	world.generate(world.background, dstars, dtargets)
+	world.generate(world.background, dstars, dtargets)  # lint:ok
 
 
 def upd(level):
@@ -237,13 +237,12 @@ def upd(level):
 		global background
 		global background_pos
 		global konstspeed
-		#FIXME: fullscreenold is redundant
-		global fullscreenold
 		global fullscreen
-
+		#lint:disable
 		if fullscreen:
 			pygame.display.set_mode((screenx, screeny), pygame.FULLSCREEN)
 		if not fullscreen:
+		#lint:enable
 			pygame.display.set_mode((screenx_current, screeny_current))
 
 		upd("screenvalues")
@@ -251,16 +250,20 @@ def upd(level):
 		konstspeed = 0.0025
 		konstspeed = konstspeed * (screenx_current / 1920.0)
 
-		world.adjust_to_screen()
+		world.adjust_to_screen()  # lint:ok
 
 		#scales images so they fill screen especially when not 16/9 ar
 		if aspect_ratio > 16.0 / 9:
+			#lint:disable
 			ratio = screenx_current / float(background.get_size()[1])
 			pygame.transform.smoothscale(background,
+			#lint:enable
 						(screenx_current, int(screeny_current * ratio)))
 		elif aspect_ratio < 16.0 / 9:
+			#lint:disable
 			ratio = screeny_current / float(background.get_size()[0])
 			pygame.transform.smoothscale(background,
+			#lint:enable
 						(int(screenx_current * ratio), screeny_current))
 
 		return

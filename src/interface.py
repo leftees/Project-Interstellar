@@ -8,12 +8,12 @@ from . import sounds
 from . import objects
 from . import midi_in
 from . import specials
-from pygame.locals import *
+from pygame.locals import QUIT, KEYUP, KEYDOWN
 
 
 def init():
-	if settings.debugmode:
-		midi_in.init()
+	pass
+	#nothing to initialize
 
 """Handles user input"""
 
@@ -24,8 +24,7 @@ def handle():
 	#TODO: Add docs
 
 	#If debugging is active, midi-events will be qued to event-list
-	if settings.debugmode:
-		midi_in.do()
+	midi_in.do()
 
 	#Translates events to actions or settings
 	process_events()

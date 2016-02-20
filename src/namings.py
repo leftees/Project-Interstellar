@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import pygame
-from pygame.locals import *
+from pygame.locals import QUIT, USEREVENT, KEYDOWN
 
 
 def modrender(typeface, size, text, antialias, color, maxsize, borderoff):

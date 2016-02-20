@@ -14,7 +14,7 @@ from . import missions
 from . import specials
 from . import sounds
 from . import midi_in
-from pygame.locals import *
+from pygame.locals import USEREVENT
 
 # Starts timer/clock for the movement, so it stays constant
 pygame.time.set_timer(USEREVENT + 1, 25)

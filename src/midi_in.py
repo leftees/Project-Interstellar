@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import pygame
 import pygame.midi
-from pygame.locals import *
+from pygame.locals import QUIT
 from . import settings
 
 pygame.init()
@@ -12,33 +12,25 @@ pygame.fastevent.init()
 def init():
 	global device
 	global connected
-	get_device()
+	global device_id
+	device_id = get_device()
 	connected = False
 	try:
 		device = pygame.midi.Input(device_id)
 		get_input()
 		connected = True
-	except NameError:
+	except TypeError:
 		connected = False
 		if settings.debugmode:
 			print("No valid keyboard connected!")
 
 
 def get_device():
-	global device_id
 
 	for i in range(pygame.midi.get_count()):
-		tmp = pygame.midi.get_device_info(i)
-		(interf, name, input, output, opened) = tmp
-
-		out = ""
-		if input:
-			out = False
-		if output:
-			out = True
-
-		if name == "USB2.0-MIDI MIDI 1" and not out:
-			device_id = i
+		(interf, name, con_in, con_out, opened) = pygame.midi.get_device_info(i)
+		if name == "CH345 MIDI 1" and not con_out:
+			return i
 
 
 def get_input():
@@ -68,9 +60,11 @@ def get_input():
 			if key == 61:
 				settings.infinitevents["fire1"] = (
 					settings.toggle(settings.infinitevents["fire1"], True, False))
+	#lint:disable
 	if device.poll():
 		midi_actions = device.read(10)
 		midi_events = pygame.midi.midis2events(midi_actions, device_id)
+		#lint:enable
 		for event in midi_events:
 			pygame.fastevent.post(event)
 
@@ -85,7 +79,6 @@ def quit():
 
 
 def do():
-
 	global connected
-	if settings.debugmode and connected:
+	if settings.debugmode and connected:  # lint:ok
 		get_input()

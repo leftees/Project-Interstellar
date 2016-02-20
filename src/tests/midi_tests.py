@@ -13,7 +13,7 @@ import os
 
 import pygame
 import pygame.midi
-from pygame.locals import *
+#from pygame.locals import *
 
 try:  # Ensure set available for output example
     set
