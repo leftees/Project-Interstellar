@@ -3,10 +3,11 @@
 import READ_BEFORE_START
 permission = READ_BEFORE_START.allow_data_collection
 if permission not in [1, -1]:
-	print(("Please read the READ_BEFORE_START"))
+	print(("Please read the READ_BEFORE_START.py"))
+	print(("It can be opend by any normal text editor."))
 	exit()
 if permission == 1:
-	pass
+	print(("Thank you for helping us making this less buggy."))
 if permission == -1:
 	print(("Error reporting disabled :("))
 
