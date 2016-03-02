@@ -163,8 +163,8 @@ def init():
 			(screenx_current, screeny_current),
 			pygame.FULLSCREEN, 32)
 	if not fullscreen:
-		screenx_current = int(screenx_current / 2.0)
-		screeny_current = int(screeny_current / 2.0)
+		screenx_current = int(screenx_current * 0.9)
+		screeny_current = int(screenx_current * 9.0 / 16)
 		screen = pygame.display.set_mode((screenx_current, screeny_current),
 		0, 32)
 
