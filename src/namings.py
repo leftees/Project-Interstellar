@@ -3,28 +3,59 @@ import pygame
 from pygame.locals import QUIT, USEREVENT, KEYDOWN
 
 
-def modrender(typeface, size, text, antialias, color, maxsize, borderoff):
-	size = getmaxsize(typeface, size, text, maxsize, borderoff)
-	tmpfont = pygame.font.SysFont(typeface, size)
-	return tmpfont.render(text, antialias, color)
+def get_max_size(file_obj):
+	from . import settings
+	screen_size = (settings.screenx_current, settings.screeny_current)
+	lines = file_obj.readlines()
+	for test_size in range(300):
+		test_size += 0
+		for line in lines:
+			text_img_size = modrender(line, test_size, screen_size,
+										settings.color, settings.typeface)[1]
+			if (text_img_size.right > settings.screenx_current
+				or text_img_size.bottom > settings.screeny_current):
+				return test_size - 2
 
 
-def getmaxsize(typeface, size, text, maxsize, borderoff):
-	# local typeface!
-	nofit = True
-	while nofit:
-		tmpfont = pygame.font.SysFont(typeface, size)
-		bool1 = tmpfont.size(text)[0] < maxsize[0] - (2 * borderoff)
-		nofit = not (bool1 and tmpfont.size(text)[1] < maxsize[1] - (2 * borderoff))
-		if size <= 5:
-			nofit = False
+def modrender(line, biggest_size, screen_size, color, typeface):
+	if len(line) != 1:
+		line = line[:-1]  # cut off new line
+	else:
+		line = " "
+	is_title = (line[-1] == ":")
+	has_defined_center = (":" in line[:-1])
+
+	if is_title:
+		if has_defined_center:
+			tmp_font = pygame.font.SysFont(typeface, biggest_size)
+			img_line = tmp_font.render(line, True, color)
+			img_pos = img_line.get_rect()
+			return (img_line, img_pos)
 		else:
-			size -= 1
-	return size
+			tmp_font = pygame.font.SysFont(typeface, biggest_size)
+			img_line = tmp_font.render(line, True, color)
+			img_pos = img_line.get_rect()
+			img_pos.centerx = screen_size[0] / 2
+			return (img_line, img_pos)
+	else:  # is no title
+		if has_defined_center:
+			tmp_font = pygame.font.SysFont(typeface, int(biggest_size * 0.8))
+			img_line = tmp_font.render(line, True, color)
+			left_img = tmp_font.render(line[:line.find(":")], True, color)
+			center = left_img.get_rect().right
+			img_pos = img_line.get_rect()
+			img_pos.left = (screen_size[0] / 2) - center
+			return (img_line, img_pos)
+		else:
+			tmp_font = pygame.font.SysFont(typeface, int(biggest_size * 0.8))
+			img_line = tmp_font.render(line, True, color)
+			img_pos = img_line.get_rect()
+			img_pos.centerx = screen_size[0] / 2
+			return (img_line, img_pos)
 
 
 def run():
-	"""Displayes the credits"""
+	"""Displays the credits"""
 	from . import settings
 
 	global lines
@@ -32,9 +63,9 @@ def run():
 	global color
 
 	color = settings.color
+	typeface = settings.typeface
 	lines = []
 	lines_pos = []
-	itera = -1
 	fade = pygame.Surface((settings.screenx_current, settings.screeny_current))
 	fade.fill((0, 0, 0))
 	fade.set_alpha(0)
@@ -43,6 +74,7 @@ def run():
 
 	fade.set_alpha(255)
 	screen = settings.screen
+	screen_size = (settings.screenx_current, settings.screeny_current)
 	screen.blit(fade, fade_pos)
 	pygame.display.flip()
 
@@ -50,47 +82,31 @@ def run():
 
 	# load the credits.txt and assign place
 	with open("./assets/lang/credits.txt") as credits_file:
-		# find the longest line to optimize font size
-		biggest = 1000
-		for line in credits_file:
-			line = line[:-1]
-			size = getmaxsize(settings.typeface, 50,
-				line, screen.get_rect().size, 0)
-			if biggest > size:
-				biggest = size
+		max_size = get_max_size(credits_file)
 	with open("./assets/lang/credits.txt") as credits_file:
 		for line in credits_file:
-			itera += 1
-			line = line[:-1]
-			line = modrender(settings.typeface, biggest,
-				line, True, color,
-				screen.get_rect().size, 0)
-			line_pos = line.get_rect()
-			# Distance from line to line is 5 pixel more than height
-			line_pos.top = ((line_pos.h + 5) * itera) + settings.screeny_current
-			line_pos.left = (settings.screenx_current / 2) - (line_pos.w / 2.0)
-			lines.append(line)
+			line_img, line_pos = modrender(line, max_size, screen_size, color, typeface)
+			lines.append(line_img)
+			line_pos.y = len(lines) * max_size * 2 + settings.screeny_current + 20
 			lines_pos.append(line_pos)
 
 	# diplays content of credits.txt
-	while not lines_pos[len(lines_pos) - 1].top <= -80:
+	while not lines_pos[-1].top <= -80:
 		settings.upd("get_events")
 		for event in settings.events:
 			if event.type == QUIT:
 				settings.quit()
+
 			if event.type == KEYDOWN:
 				if pygame.key.name(event.key) == "escape":
-					lines_pos[len(lines_pos) - 1].top = -90
+					lines_pos[-1].top = -90
+
 			if event.type == USEREVENT + 1:
-
 				screen.blit(fade, fade_pos)
-
 				for credit in range(len(lines)):
 					screen.blit(lines[credit], lines_pos[credit])
-
 				pygame.display.flip()
-
 				for credit in range(len(lines)):
-					lines_pos[credit].top -= 2
+					lines_pos[credit].top -= 1
 
 	pygame.mouse.set_visible(True)
