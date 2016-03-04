@@ -203,7 +203,7 @@ def reset():
 	color = (255, 255, 10)
 
 	from . import missions
-	missions.handle("pause")
+	missions.time("start")
 
 	if debugmode:  # lint:ok
 		fullscreen = False  # lint:ok

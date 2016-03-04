@@ -5,23 +5,26 @@ import math
 
 
 def init():
-	time("ingame")
+	time("start")
 
 
-def time(usage):
-	if not "newtime" in locals():
-		newtime = pygame.time.get_ticks()
-	if usage == "ingame":
+def time(action):
+	global oldtime
+	global newtime
+#	if not "newtime" in locals():
+#		newtime = pygame.time.get_ticks()
+	if action == "pause":
 		oldtime = newtime
 		newtime = pygame.time.get_ticks()
 		settings.player.timeplay += newtime - oldtime
-	if usage == "pause":
+	if action == "start":
 		oldtime = pygame.time.get_ticks()
 		newtime = pygame.time.get_ticks()
+	if action == "get_time":
+		return pygame.time.get_ticks() - oldtime + settings.player.timeplay
 
 
-def handle(usage):
-	time("ingame")
+def handle():
 	target_shooting()
 	player_hit_by_explosion()
 

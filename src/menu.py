@@ -233,6 +233,7 @@ def main():
 def pause():
 	"""pausing menu"""
 
+	missions.time("pause")
 	sounds.music.play("pause")
 	pygame.mouse.set_visible(True)
 
@@ -242,9 +243,7 @@ def pause():
 
 	while run:
 
-		missions.handle("pause")
 		events = pause_menu.run()
-
 		for event in events:
 			if event in ["event.CONTINUE", "Continue"]:
 				sounds.music.play("unpause")
@@ -274,6 +273,7 @@ def pause():
 				run = False
 		pygame.display.flip()
 	pygame.mouse.set_visible(False)
+	missions.time("start")
 
 
 def choose_world():
@@ -350,7 +350,6 @@ def choose_world():
 		pygame.display.flip()
 
 	pygame.mouse.set_visible(False)
-	missions.handle("pause")
 	sounds.music.play("unpause")
 	return selected
 

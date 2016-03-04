@@ -66,7 +66,7 @@ def main():
 		draw.ingame()
 
 		# check if missions have been fulfilled
-		missions.handle("ingame")
+		missions.handle()
 
 
 while True:

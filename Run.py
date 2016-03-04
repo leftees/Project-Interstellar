@@ -13,6 +13,8 @@ try:
 
 	os.environ['SDL_VIDEO_CENTERED'] = '1'
 
+	#fix sound not playing correctly
+	pygame.mixer.pre_init(44100, -16, 2, 2048)
 	pygame.init()
 	# checks if font module is availible
 	pygame.font
