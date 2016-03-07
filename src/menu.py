@@ -505,23 +505,3 @@ def options():
 	menu.IO.write("./assets/templates/default.vars", "ratio", 1100)
 	settings.upd("adjust_screen")
 	pygame.mouse.set_visible(False)
-
-
-class overlay():
-	"""A mother-class for in-game overlays.
-
-	init(self) inits the module
-	add_overlay(self, overlay_obj) adds an overlay element"""
-
-	def __init__(self):
-		self.objects = {}
-
-	def add_overlay_element(self, overlay_obj):
-		"""Adds an overlay element to the whole overlay.
-
-		This method requires an instance.
-		It is called as follows: instance.add_overlay_element(overlay_obj)
-		whereas overlay_obj must fulfil following requirements:
-		img with type: pygame.Surface
-		"""
-		self.objects[overlay_obj.name] = overlay_obj
