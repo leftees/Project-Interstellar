@@ -47,8 +47,8 @@ class create_overlay():
 					return
 
 	def blit(self, screen):
-		for obj in self.objects:
-			pass
+		for obj in self.objects.values():
+			screen.blit(obj.img, obj.pos)
 
 
 class create_overlay_object():
@@ -56,5 +56,21 @@ class create_overlay_object():
 
 	def __init__(self, name):
 		self.name = name
-		self.img = pygame.Surface((0, 0))
-		self.pos = pygame.Rect(0, 0, 0, 0)
+
+	def set_image(self, img):
+		self.img = img
+
+	def load_image(self, file_or_fileobj):
+		self.image = pygame.load(file_or_fileobj)
+
+	def load_text(self, text, font_name, size, color, **kwargs):
+		if type(size) == int:
+			font = pygame.font.SysFont(font_name, size, **kwargs)
+			self.img = font.render(text, True, color)
+		if type(size) in [list, tuple]:
+			for int_size in range(size[1] / 2):
+				font = pygame.font.SysFont(font_name, size, **kwargs)
+				test_size = font.render(text)
+				if test_size[0] > size[0] or test_size[1] > size[1]:
+					font = pygame.font.SysFont(font_name, test_size - 1, **kwargs)
+					self.img = font.render(text, True, color)
