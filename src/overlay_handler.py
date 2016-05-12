@@ -64,8 +64,13 @@ class create_overlay():
 				self.objects[element_name].deactivate()
 
 	def blit(self, screen):
+<<<<<<< HEAD
 		for object_name in self.objects:
 			self.objects[object_name].blit(screen)
+=======
+		for obj in self.objects.values():
+			screen.blit(obj.img, obj.pos)
+>>>>>>> 4bfb5261eef194ac0bb9da5fcba6af9210ecb524
 
 
 class overlay_element_base_class():
@@ -73,6 +78,7 @@ class overlay_element_base_class():
 
 	def __init__(self, name, pos, alignment="topleft"):
 		self.name = name
+<<<<<<< HEAD
 		self.pos = pygame.Rect((0, 0, 0, 0))
 		#TODO implement size
 		self.set_alignment(pos, "topleft")
@@ -108,3 +114,23 @@ class overlay_element_base_class():
 
 	def deactivate(self):
 		self.active = False
+=======
+
+	def set_image(self, img):
+		self.img = img
+
+	def load_image(self, file_or_fileobj):
+		self.image = pygame.load(file_or_fileobj)
+
+	def load_text(self, text, font_name, size, color, **kwargs):
+		if type(size) == int:
+			font = pygame.font.SysFont(font_name, size, **kwargs)
+			self.img = font.render(text, True, color)
+		if type(size) in [list, tuple]:
+			for int_size in range(size[1] / 2):
+				font = pygame.font.SysFont(font_name, size, **kwargs)
+				test_size = font.render(text)
+				if test_size[0] > size[0] or test_size[1] > size[1]:
+					font = pygame.font.SysFont(font_name, test_size - 1, **kwargs)
+					self.img = font.render(text, True, color)
+>>>>>>> 4bfb5261eef194ac0bb9da5fcba6af9210ecb524

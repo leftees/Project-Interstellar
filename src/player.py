@@ -3,6 +3,7 @@ import pygame
 import math
 from libs.pyganim import pyganim
 from ConfigParser import SafeConfigParser
+from . import overlay_handler
 
 
 class player():
@@ -26,6 +27,9 @@ class player():
 		self.speedboost = 1
 		self.explosion_anim = None
 		self.new_ship("Player1")
+		self.overlay = overlay_handler.create_overlay()
+		overlay_obj = overlay_handler.create_overlay_object("test")
+		self.overlay.add_overlay_element(overlay_obj)
 
 	def create_images(self, name):
 		"""creates new images from one image for the player"""
@@ -217,6 +221,7 @@ class player():
 	def blit(self, screen):
 		if self.explosion_anim is None:
 			screen.blit(self.img, self.pos)
+			self.overlay.blit(screen)
 		else:
 			self.update = False
 			pos = self.pos.copy()
